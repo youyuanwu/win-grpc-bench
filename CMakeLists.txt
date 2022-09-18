@@ -14,6 +14,7 @@ if(NOT win_grpc_POPULATED)
   add_subdirectory(${win_grpc_SOURCE_DIR} ${win_grpc_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
+add_subdirectory(hgz)
 add_subdirectory(helloworld_proto)
 add_subdirectory(win_grpc)
 

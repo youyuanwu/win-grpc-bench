@@ -3,6 +3,12 @@
 
 #include "boost/wingrpc/wingrpc.hpp"
 
+#include <boost/asio/signal_set.hpp>
+
+#include <boost/log/core.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/trivial.hpp>
+
 namespace net = boost::asio;
 namespace winnet = boost::winasio;
 namespace grpc = boost::wingrpc;
@@ -21,9 +27,14 @@ public:
   }
 };
 
-
+void log_init() {
+  namespace logging = boost::log;
+  logging::core::get()->set_filter(logging::trivial::severity >=
+                                   logging::trivial::info);
+}
 
 int main() {
+  log_init();
 
   // init http module
   winnet::http::http_initializer init;
@@ -32,6 +43,8 @@ int main() {
 
   boost::system::error_code ec;
   net::io_context io_context;
+  net::signal_set signals(io_context, SIGINT, SIGTERM);
+  signals.async_wait([&io_context](auto, auto) { io_context.stop(); });
 
   server2 svr;
 
@@ -51,5 +64,7 @@ int main() {
                                                                     handler)
       ->start();
 
+  BOOST_LOG_TRIVIAL(info) << "server start listening at: " << url;
   io_context.run();
+  BOOST_LOG_TRIVIAL(info) << "server stopped.";
 }
