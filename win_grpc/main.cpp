@@ -55,6 +55,10 @@ int main() {
   winnet::http::basic_http_handle<net::io_context::executor_type> queue(
       io_context);
   queue.assign(winnet::http::open_raw_http_queue());
+  queue.remove_url(url, ec);
+  if(ec){
+    BOOST_LOG_TRIVIAL(info) << "remove url: " <<ec;
+  }
   winnet::http::http_simple_url simple_url(queue, url);
 
   auto handler = std::bind(grpc::default_handler, middl, std::placeholders::_1,
@@ -65,6 +69,18 @@ int main() {
       ->start();
 
   BOOST_LOG_TRIVIAL(info) << "server start listening at: " << url;
+  std::vector<std::thread> threads;
+  int parallelism = std::thread::hardware_concurrency();
+  BOOST_LOG_TRIVIAL(info) << "server using " << parallelism << " threads";
+  threads.reserve(parallelism);
+  for (int i = 0; i < parallelism; ++i) {
+    threads.emplace_back([&io_context] {
+      io_context.run();
+    });
+  }
   io_context.run();
   BOOST_LOG_TRIVIAL(info) << "server stopped.";
+  for (auto &thread : threads) {
+    thread.join();
+  }
 }

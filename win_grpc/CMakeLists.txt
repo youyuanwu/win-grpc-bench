@@ -1,8 +1,8 @@
 set (CMAKE_CXX_STANDARD 20)
 
-add_executable(wingrpc-main main.cpp)
+add_executable(win_grpc_main main.cpp)
 
-target_link_libraries(wingrpc-main PRIVATE wingrpc libprotobuf)
+target_link_libraries(win_grpc_main PRIVATE wingrpc libprotobuf)
 
 set(_proto_file_path ${CMAKE_CURRENT_BINARY_DIR}/../helloworld_proto/helloworld.proto)
 
@@ -24,9 +24,9 @@ protobuf_generate(LANGUAGE grpc
 )
 
 
-target_sources(wingrpc-main PRIVATE ${PROTO_SRCS} ${PROTO_HDRS} ${GRPC_SRCS})
+target_sources(win_grpc_main PRIVATE ${PROTO_SRCS} ${PROTO_HDRS} ${GRPC_SRCS})
 
-target_include_directories(wingrpc-main
+target_include_directories(win_grpc_main
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 )
