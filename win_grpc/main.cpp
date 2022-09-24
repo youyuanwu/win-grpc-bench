@@ -31,7 +31,7 @@ public:
 void log_init() {
   namespace logging = boost::log;
   logging::core::get()->set_filter(logging::trivial::severity >=
-                                   logging::trivial::info);
+                                   logging::trivial::debug);
 }
 
 int main() {

@@ -26,7 +26,7 @@ else()
   include(FetchContent)
   FetchContent_Declare(win_grpc
     GIT_REPOSITORY https://github.com/youyuanwu/win-grpc.git
-    GIT_TAG bcab709c87b0fb47fac50206c00eff866aace3c6)
+    GIT_TAG f619ae3f3efcfbbe5095deb7533fd455efa3312d)
   FetchContent_GetProperties(win_grpc)
   if(NOT win_grpc_POPULATED)
     FetchContent_Populate(win_grpc)
