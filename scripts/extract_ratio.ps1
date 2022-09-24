@@ -14,7 +14,7 @@ $mtline = Get-Content $mt_path | Select-String -Pattern Requests/sec: | select-o
 # split by tab
 $winnum = $winline.Line.Split("`t")[1]
 $mtnum = $mtline.Line.Split("`t")[1]
-Write-Output "wingrpc: $winnum req/s"
-Write-Output  "grpcmt:  $mtnum req/s"
+Write-Output "wingrpc: $winnum" # req/s
+Write-Output  "grpcmt: $mtnum" # req/s
 $ratio = $winnum/$mtnum
 Write-Output  "ratio: $ratio"

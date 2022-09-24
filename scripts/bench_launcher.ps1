@@ -1,3 +1,5 @@
+# This script launches one test case for win_grpc and grpc_mt
+
 param(
   [string] $Mode = "Debug",
   [int] $Loop = 1,
@@ -11,8 +13,12 @@ $path = ".\log"
 If (!(test-path $path))
 {
   New-Item $path -ItemType Directory
-} else {
-  Remove-Item -Recurse $path\*
+}
+
+$path2 = ".\log\endresult"   
+If (!(test-path $path2))
+{
+  New-Item $path2 -ItemType Directory
 }
 
 Write-Host "Loop for $Loop rounds"
@@ -33,10 +39,10 @@ Write-Host "---grpc_mt bench---"
 Write-Host "---grpc_mt bench end---"
 
 Write-Host "extracting result for comparison"
-.\scripts\extract_ratio.ps1 | Tee-Object -FilePath .\log\extract_ratio.log -Append
+.\scripts\extract_ratio.ps1 | Tee-Object -FilePath $path2\$Scenarios.log -Append
 
 }
 
 Write-Host "Final result"
-Get-Content -Path .\log\extract_ratio.log | Write-Host
+Get-Content -Path $path2\$Scenarios.log | Write-Host
 

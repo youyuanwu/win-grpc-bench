@@ -1,3 +1,5 @@
+# This script launches one test for one exeutable
+
 param(
   [string] $Mode = "Debug",
   [string] $Flavour = "win_grpc",
@@ -42,6 +44,7 @@ Write-Host "warming up"
             --data-file "$payload" `
             $_hostport | Out-Null
 
+# remove rpc error strings noise output
 Write-Host "start bench"
 & $hgz_path `
     		--proto="$proto_file_path" `
@@ -52,7 +55,7 @@ Write-Host "start bench"
             --rps=0 `
             --duration 20s `
             --data-file "$payload" `
-            $_hostport
+            $_hostport | Select-String -Pattern "rpc error" -NotMatch | Select-Object -ExpandProperty Line
 
 Write-Host "End bench"
 

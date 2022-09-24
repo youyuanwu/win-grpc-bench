@@ -74,10 +74,12 @@ class GreeterClient {
 int main(int argc, char** argv) {
 
     std::string target_str;
+    std::string user_str;
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help", "produce help message")
         ("target", po::value(&target_str)->default_value("localhost:50051"), "host:port target")
+        ("user", po::value(&user_str)->default_value("world"), "name to send to hello world endpoint")
     ;
 
     po::variables_map vm;
@@ -96,8 +98,8 @@ int main(int argc, char** argv) {
     auto ssl_creds = grpc::SslCredentials(ssl_opts);
   GreeterClient greeter(
       grpc::CreateChannel(target_str, ssl_creds));
-  std::string user("world");
-  std::string reply = greeter.SayHello(user);
+
+  std::string reply = greeter.SayHello(user_str);
   std::cout << "Greeter received: " << reply << std::endl;
 
   return 0;
